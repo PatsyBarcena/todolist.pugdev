@@ -1,0 +1,19 @@
+# dependencies
+/node_modules
+
+# production
+/dist
+
+# local env files
+.env.local
+.env.*
+
+# system
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# others
+package-lock.json
