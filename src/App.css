@@ -1,7 +1,14 @@
-body {
-  background-image: url('/src/assets/backgrounds/fondo-patsy.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+
+.app {
+  text-align: center;
+  padding: 2rem;
   font-family: 'Poppins', sans-serif;
+  background: linear-gradient(145deg, #ffe4f1, #e0f7fa);
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #444;
+  margin-bottom: 1.5rem;
 }

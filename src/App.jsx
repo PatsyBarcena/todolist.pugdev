@@ -1,78 +1,60 @@
-// src/App.jsx
-import { useEffect, useState } from "react";
-import TaskForm from "./components/TaskForm";
-import TaskList from "./components/TaskList";
-import "./App.css";
+import React, { useEffect, useState } from 'react';
+import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
+import './App.css';
 
-const App = () => {
+function App() {
   const [tasks, setTasks] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Cargar desde localStorage
+  // ✅ GET tareas desde API
   useEffect(() => {
-    const stored = localStorage.getItem("todoTasks");
-    if (stored) {
-      setTasks(JSON.parse(stored));
-    } else {
-      // Tarea de ejemplo por defecto
-      setTasks([
-        {
-          desc: "Soccer practice",
-          date: new Date().toISOString().split("T")[0],
-          added: new Date().toLocaleString(),
-          isCompleted: false,
-          category: {
-            id: 5,
-            name: "Sport",
-            img: "https://iili.io/dL9hYsj.png"
-          }
-        }
-      ]);
-    }
+    fetch('https://jsonplaceholder.typicode.com/todos?_limit=5') // TEMPORAL para pruebas
+      .then(res => res.json())
+      .then(data => setTasks(data));
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("todoTasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const handleAddTask = ({ desc, date, category }) => {
+  // ✅ POST nueva tarea
+  const addTask = (text) => {
     const newTask = {
-      desc,
-      date,
-      added: new Date().toLocaleString(),
-      isCompleted: false,
-      category
+      title: text,
+      completed: false,
+      userId: 1
     };
-    setTasks([...tasks, newTask]);
+
+    fetch('https://jsonplaceholder.typicode.com/todos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newTask)
+    })
+      .then(res => res.json())
+      .then(data => setTasks([...tasks, data]));
   };
 
-  const handleCompleteTask = (index) => {
-    const updated = [...tasks];
-    updated[index].isCompleted = !updated[index].isCompleted;
-    setTasks(updated);
+  // ✅ DELETE tarea por id
+  const deleteTask = (id) => {
+    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+      method: 'DELETE'
+    }).then(() => {
+      setTasks(tasks.filter(task => task.id !== id));
+    });
   };
 
-  const handleDeleteTask = (index) => {
-    const updated = tasks.filter((_, i) => i !== index);
-    setTasks(updated);
+  // ✅ DELETE todas las tareas
+  const deleteAllTasks = () => {
+    Promise.all(
+      tasks.map(task =>
+        fetch(`https://jsonplaceholder.typicode.com/todos/${task.id}`, { method: 'DELETE' })
+      )
+    ).then(() => setTasks([]));
   };
 
   return (
-    <div className="todo-container">
-      <h1>To Do List</h1>
-      <TaskForm
-        onAddTask={handleAddTask}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-      <h2>My Tasks</h2>
-      <TaskList
-        tasks={tasks}
-        onCompleteTask={handleCompleteTask}
-        onDeleteTask={handleDeleteTask}
-      />
+    <div className="app">
+      <h1>🌸 To Do List Patsy API</h1>
+      <TaskForm addTask={addTask} deleteAllTasks={deleteAllTasks} />
+      <TaskList tasks={tasks} deleteTask={deleteTask} />
     </div>
   );
-};
+}
 
 export default App;

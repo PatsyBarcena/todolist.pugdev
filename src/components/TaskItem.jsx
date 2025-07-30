@@ -1,21 +1,12 @@
-// src/components/TaskItem.jsx
-const TaskItem = ({ task, onComplete, onDelete }) => {
+import React from 'react';
+
+function TaskItem({ task, deleteTask }) {
   return (
-    <li className={`todo-item ${task.isCompleted ? "completed" : ""}`}>
-      <img src={task.category.img} alt={task.category.name} />
-      <div>
-        <strong>{task.category.name}</strong> - <span className="task-desc">{task.desc}</span>
-        <br />
-        <small>Added on: {task.added}</small>
-        <br />
-        <small className="task-date">Task due: {task.date}</small>
-      </div>
-      <div className="todo-actions">
-        <button className="complete-btn" onClick={onComplete}>Complete</button>
-        <button className="delete-btn" onClick={onDelete}>Delete</button>
-      </div>
+    <li className="task-item">
+      <span>{task.title}</span>
+      <button onClick={() => deleteTask(task.id)}>❌</button>
     </li>
   );
-};
+}
 
 export default TaskItem;
