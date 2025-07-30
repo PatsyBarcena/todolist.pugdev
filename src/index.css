@@ -1,10 +1,8 @@
-/* src/index.css */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* index.css */
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: #333;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+
+  background: linear-gradient(145deg, #ffe2e2, #ffd6ec); /* Tonos pastel suaves */
+  color: #333;
 }
